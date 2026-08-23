@@ -1,0 +1,12 @@
+Crop_Yield_Rain/
+│
+├── dataset/
+│   └── crop_production.csv
+│
+├── models/
+│   └── crop_yield_model.pkl
+│
+├── train_model.py
+├── predict.py
+├── app.py
+└── requirements.txt

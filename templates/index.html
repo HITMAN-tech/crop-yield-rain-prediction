@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Crop Yield Predictor</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #deecdd 0%, #c1dfc4 100%);
+            min-height: 100vh;
+        }
+        .main-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            color: white;
+            border: none;
+            transition: transform 0.2s;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            color: white;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+        .result-box {
+            background-color: #e8f5e9;
+            border-left: 5px solid #28a745;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            
+            <!-- App Header -->
+            <div class="text-center mb-4">
+                <h1 class="fw-bold text-success">🌱 Crop Yield Predictor</h1>
+                <p class="text-muted">Predict your crop yields accurately using Machine Learning</p>
+            </div>
+
+            <!-- Main Form Card -->
+            <div class="card main-card p-4 p-sm-5">
+                <form action="/predict" method="POST">
+                    
+                    <!-- State Dropdown -->
+                    <div class="mb-4">
+                        <label for="state" class="form-label fw-semibold text-secondary">State</label>
+                        <select class="form-select form-select-lg" id="state" name="state" required>
+                            <option value="" disabled selected>-- Select State --</option>
+                            {% for s in states %}
+                            <option value="{{ s }}" {% if s == state %}selected{% endif %}>{{ s }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Crop Dropdown -->
+                    <div class="mb-4">
+                        <label for="crop" class="form-label fw-semibold text-secondary">Crop Name</label>
+                        <select class="form-select form-select-lg" id="crop" name="crop" required>
+                            <option value="" disabled selected>-- Select Crop --</option>
+                            {% for c in crops %}
+                            <option value="{{ c }}" {% if c == crop %}selected{% endif %}>{{ c }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Rainfall Input -->
+                    <div class="mb-4">
+                        <label for="rainfall" class="form-label fw-semibold text-secondary">Annual Rainfall (mm)</label>
+                        <input type="number" step="any" class="form-control form-control-lg" id="rainfall" name="rainfall" 
+                               placeholder="e.g., 1200.5" value="{{ rainfall if rainfall else '' }}" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-gradient btn-lg w-100 fw-bold mt-2">🔍 Predict Yield</button>
+                </form>
+
+                <!-- Error Display -->
+                {% if error %}
+                <div class="alert alert-danger mt-4 text-center" role="alert">
+                    ⚠️ Error: {{ error }}
+                </div>
+                {% endif %}
+
+                <!-- Output/Result Display -->
+                {% if prediction is not none %}
+                <div class="result-box p-4 mt-4 text-center">
+                    <h5 class="text-muted mb-1">Estimated Yield:</h5>
+                    <h2 class="display-5 fw-bold text-success mb-2">{{ prediction }} <span class="fs-4 text-secondary">Quintals/Hectare</span></h2>
+                    <small class="text-muted d-block">This estimation is based on {{ rainfall }}mm rainfall for {{ crop }} in {{ state }}.</small>
+                </div>
+                {% endif %}
+
+            </div>
+
+            <div class="text-center mt-4">
+                <small class="text-secondary">© 2026 Smart Agriculture Dashboard</small>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://jsdelivr.net"></script>
+</body>
+</html>
